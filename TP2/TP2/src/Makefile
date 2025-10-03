@@ -3,7 +3,7 @@
 #                                     #
 #######################################
 
-PROG = project_points
+PROG = project_points project_points_bonus
 
 all : $(PROG)
 
@@ -13,7 +13,11 @@ CFLAGS    =  -g -Wall
 CPPFLAGS  =  -DDEBUG
 LDFLAGS   =  -g -lm
 
-project_points : project_points.o Utils/Util.o Utils/imageFormationUtils.o
+project_points : project_points.o Utils/Util.o Utils/imageFormationUtils.o -lm
+
+
+project_points_bonus : project_points_bonus.o Utils/Util.o Utils/imageFormationUtils.o -lm
+	$(CC) $(LDFLAGS) $^ -o $@
 
 clean :
 	@rm -f *.o Utils/*.o $(PROG)

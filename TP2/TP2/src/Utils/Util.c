@@ -298,3 +298,80 @@ void write_ppm(ppm_file image, char *filename) {
   fclose(ofp);
 
 }
+
+pam_file read_pam(char *filename) {
+    pam_file image;
+    FILE *ifp;
+    int i, j;
+
+    /* Opening input file */
+    ifp = fopen(filename, "r");
+    if (ifp == NULL) {
+        printf("error in opening file %s\n", filename);
+        pm_error("FILE OPEN ERROR");
+    }
+
+    /* Magic number reading */
+    image.magic_number = getc(ifp);
+    if (image.magic_number == EOF) {
+        pm_error("EOF / read error / magic number");
+    }
+
+    if (image.magic_number != '7') {
+        pm_error("wrong file type");
+    }
+
+    /* Reading image dimensions */
+    image.cols = pm_getint(ifp);
+    image.rows = pm_getint(ifp);
+    image.depth = pm_getint(ifp);
+    image.maxval = pm_getint(ifp);
+
+    /* Memory allocation */
+    image.map = (char *) malloc(image.cols * image.rows * image.depth * sizeof(char));
+    if (!image.map) {
+        pm_error("Memory allocation failed");
+    }
+
+    /* Reading */
+    for (i = 0; i < image.rows; i++) {
+        for (j = 0; j < image.cols; j++) {
+            int k;
+            for (k = 0; k < image.depth; k++) {
+                image.map[(i * image.cols + j) * image.depth + k] = pm_getrawbyte(ifp);
+            }
+        }
+    }
+
+    /* Closing input file */
+    fclose(ifp);
+
+    return image;
+}
+
+void write_pam(const char *filename, int width, int height, const pixel_rgba *data) {
+    FILE *ofp;
+
+    // Opening output file in BINARY mode is important!
+    ofp = fopen(filename, "wb");
+    if (ofp == NULL) {
+        printf("Error in opening file %s\n", filename);
+        // pm_error("FILE OPEN ERROR"); // Or some other error handling
+        return;
+    }
+
+    // Write the PAM header
+    fprintf(ofp, "P7\n");
+    fprintf(ofp, "WIDTH %d\n", width);
+    fprintf(ofp, "HEIGHT %d\n", height);
+    fprintf(ofp, "DEPTH 4\n");
+    fprintf(ofp, "MAXVAL 255\n");
+    fprintf(ofp, "TUPLTYPE RGB_ALPHA\n");
+    fprintf(ofp, "ENDHDR\n");
+
+    // Write the entire image data in one go
+    fwrite(data, sizeof(pixel_rgba), width * height, ofp);
+
+    // Closing output file
+    fclose(ofp);
+}

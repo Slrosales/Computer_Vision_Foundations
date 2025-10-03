@@ -9,6 +9,9 @@
 /* Detailed information is shown below */
 
 /* This is a customized C structure for storing 3D point information */
+
+#include "types.h"
+
 struct point3d{
    float  x; // If you want to access x, you need to do p.x, suppose you decleared p as "struct point3d p;"
    float  y; // Similar to above

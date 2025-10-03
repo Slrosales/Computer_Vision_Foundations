@@ -7,6 +7,7 @@
 #include <math.h>
 #include "imageFormationUtils.h"
 
+#include "types.h"
 
 struct point3d *readOff(char *fileName, int *N){
 	struct point3d *points;

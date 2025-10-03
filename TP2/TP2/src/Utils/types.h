@@ -22,6 +22,13 @@ typedef struct {
   bit blue;
 } pixel;
 
+typedef struct {
+  unsigned char red;
+  unsigned char green;
+  unsigned char blue;
+  unsigned char alpha;
+} pixel_rgba;
+
 // A PPM file, containing a pixel map and its metadata
 typedef struct {
   pixel *pixmap;
@@ -30,5 +37,17 @@ typedef struct {
   int cols;
   int maxval;
 } ppm_file;
+
+
+// A PAM file, containing an arbitrary map and its metadata
+typedef struct {
+  char *map;
+  char magic_number; 
+  int rows;
+  int cols;
+  int depth; 
+  int maxval;
+  char *tuple_type; 
+} pam_file;
 
 #endif

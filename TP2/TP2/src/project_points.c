@@ -28,50 +28,37 @@ int main(int argc, char *argv[])
     // Intrinsic parameters
     float f = atof(argv[2]);         // Focal length (if 0, use orthogonal projection)
 
-    int width = atoi(argv[3]);       // Output image width (in pixels)
-    int height = atoi(argv[4]);      // Output image height (in pixels)
-
-    float u_0 = atof(argv[5]);       // Principal point u-coordinate (image center x)
-    float v_0 = atof(argv[6]);       // Principal point v-coordinate (image center y)
+    int width = atoi(argv[3]);       
+    int height = atoi(argv[4]);      
+    float u_0 = atof(argv[5]);       // Principal point - image center x
+    float v_0 = atof(argv[6]);       // Principal point - image center y 
 
     float alpha_u = atof(argv[7]);   // Scale factor in u direction (pixels per unit)
-    float alpha_v = atof(argv[8]);   // Scale factor in v direction (pixels per unit)
+    float alpha_v = atof(argv[8]);   
 
-    // Extrinsic parameters (camera pose)
-    float gama = atof(argv[9]);      // Rotation around Z axis (gamma, in degrees/radians)
-    float beta = atof(argv[10]);     // Rotation around Y axis (beta, in degrees/radians)
-    float alpha = atof(argv[11]);    // Rotation around X axis (alpha, in degrees/radians)
+    // Extrinsic parameters 
+    float gama = atof(argv[9]);      // Rotation around Z axis in degrees/radians
+    float beta = atof(argv[10]);     
+    float alpha = atof(argv[11]);    
     float T_x = atof(argv[12]);      // Translation along X axis
-    float T_y = atof(argv[13]);      // Translation along Y axis
-    float T_z = atof(argv[14]);      // Translation along Z axis
+    float T_y = atof(argv[13]);      
+    float T_z = atof(argv[14]);      
 
     // Use depth map
-    /**
-     * @brief Flag indicating whether to use depth information.
-     *
-     * This variable is set by converting the 16th command-line argument (argv[15]) to an integer.
-     * It is typically used to enable or disable the use of depth data in subsequent processing,
-     * such as projecting 3D points onto a 2D plane or performing depth-based filtering.
-     * A non-zero value usually means depth should be used, while zero means it should be ignored.
-     */
     int use_depth = atoi(argv[15]);
 
     // The output filename is generated from the input
     char output_filename[512];
     sprintf(output_filename, "results/%c_%.0f_%d_%d_%.1f_%.1f_%.2f_%.2f_%.1f_%.1f_%.1f_%.1f_%.1f_%.1f_%d.ppm",
-            off_filename[7], // hack: use first letter of model to create output (f or h in this TP)
+            off_filename[7], 
             f, width, height, u_0, v_0, alpha_u, alpha_v,
             gama, beta, alpha, T_x, T_y, T_z,
             use_depth);
 
     // Start processing
     // Read the pointcloud
-    /*
-     * points: Pointer to an array of struct point3d, representing the 3D points read from the OFF file.
-     * N_v: Integer variable that stores the number of vertices (points) read from the OFF file.
-     */
     struct point3d *points;
-    int N_v = 0;
+    int N_v = 0; // stores the number of vertices
     points = readOff(off_filename, &N_v);
 
     // and center it
@@ -114,8 +101,6 @@ int main(int argc, char *argv[])
         orthogonal = 1;
     }
 
-    printf("PLEASE IMPLEMENT THE PROJECTION\n");
-
     float TransMatrix[16];
     computeTrans(gama, beta, alpha, T_x, T_y, T_z, TransMatrix);
     float px, py, pz, pw;
@@ -129,9 +114,9 @@ int main(int argc, char *argv[])
         px = points[i].x;
         py = points[i].y;
         pz = points[i].z;
-        pw = 1.0f;         
+        pw = 1.0f;
 
-        // Eq 1: Apply the transformation (Rigin transformation)
+        // Eq 1: Apply the transformation (Rigid transformation)
         x_prime = TransMatrix[0]*px + TransMatrix[1]*py + TransMatrix[2]*pz + TransMatrix[3]*pw;
         y_prime = TransMatrix[4]*px + TransMatrix[5]*py + TransMatrix[6]*pz + TransMatrix[7]*pw;
         z_prime = TransMatrix[8]*px + TransMatrix[9]*py + TransMatrix[10]*pz + TransMatrix[11]*pw;
@@ -182,9 +167,6 @@ int main(int argc, char *argv[])
 
             }
         } 
-
-        // If ok, update the image pixel color
-
     }
 
     // Save the image
