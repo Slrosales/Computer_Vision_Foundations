@@ -99,7 +99,7 @@ int main(int argc, char *argv[])
     float TransMatrix[16];
     computeTrans(gama, beta, alpha, T_x, T_y, T_z, TransMatrix);
     float px, py, pz, pw;
-    float x_prime, y_prime, z_prime, t_w;
+    float x_prime, y_prime, z_prime;
     float u, v;
     int pixel_index; 
     float x_cam, y_cam;
