@@ -82,12 +82,75 @@ pgm_file binomial_filter(pgm_file image, int filter_size, int iterations) {
 }
 
 
+int comparator(const void *a, const void *b) {
+    return (*(gray *)a - *(gray *)b);
+}
+
 // apply median filter to image
 pgm_file median_filter(pgm_file image, int filter_size, int iterations) {
     pgm_file output_image;
-
-    printf("PLEASE IMPLEMENT median_filter\n");
     output_image = image;
 
+    output_image.graymap = (gray *) malloc(image.rows * image.cols * sizeof(gray));
+
+    if (filter_size == 3){
+        gray window[9]; 
+        for (int k = 1; k <= iterations; k++){
+            for (int i = 1; i < image.rows - 1; i++){
+                for (int j = 1; j < image.cols -1; j++){
+                    window[0] = image.graymap[(i-1) * image.cols + (j-1)];
+                    window[1] = image.graymap[(i-1)* image.cols + j];
+                    window[2] = image.graymap[(i-1) * image.cols + (j+1)];
+                    window[3] = image.graymap[i * image.cols + (j-1)];
+                    window[4] = image.graymap[i * image.cols + j];
+                    window[5] = image.graymap[i * image.cols + (j+1)];
+                    window[6] = image.graymap[(i+1) * image.cols + (j-1)];
+                    window[7] = image.graymap[(i+1) * image.cols + j];
+                    window[8] = image.graymap[(i+1) * image.cols + (j+1)];
+
+                    qsort(window, 9, sizeof(gray), comparator);
+                    output_image.graymap[i * image.cols + j] = window[4];
+                }
+            }
+            image = output_image;
+        }
+    } else if (filter_size == 5){
+        gray window[25];
+        for (int k = 1; k <= iterations; k++){
+            for (int i = 2; i < image.rows - 2; i++){
+                for (int j = 2; j < image.cols - 2; j++){
+                    window[0] = image.graymap[(i-2) * image.cols + (j-2)];
+                    window[1] = image.graymap[(i-2)* image.cols + (j-1)];
+                    window[2] = image.graymap[(i-2) * image.cols + j];
+                    window[3] = image.graymap[(i-2) * image.cols + (j+1)];
+                    window[4] = image.graymap[(i-2) * image.cols + (j+2)];
+                    window[5] = image.graymap[(i-1) * image.cols + (j-2)];
+                    window[6] = image.graymap[(i-1)* image.cols + (j-1)];
+                    window[7] = image.graymap[(i-1) * image.cols + j];
+                    window[8] = image.graymap[(i-1) * image.cols + (j+1)];
+                    window[9] = image.graymap[(i-1) * image.cols + (j+2)];
+                    window[10] = image.graymap[i * image.cols + (j-2)];
+                    window[11] = image.graymap[i* image.cols + (j-1)];
+                    window[12] = image.graymap[i * image.cols + j];
+                    window[13] = image.graymap[i * image.cols + (j+1)];
+                    window[14] = image.graymap[i * image.cols + (j+2)];
+                    window[15] = image.graymap[(i+1) * image.cols + (j-2)];
+                    window[16] = image.graymap[(i+1)* image.cols + (j-1)];
+                    window[17] = image.graymap[(i+1) * image.cols + j];
+                    window[18] = image.graymap[(i+1) * image.cols + (j+1)];
+                    window[19] = image.graymap[(i+1) * image.cols + (j+2)];
+                    window[20] = image.graymap[(i+2) * image.cols + (j-2)];
+                    window[21] = image.graymap[(i+2)* image.cols + (j-1)];
+                    window[22] = image.graymap[(i+2) * image.cols + j];
+                    window[23] = image.graymap[(i+2) * image.cols + (j+1)];
+                    window[24] = image.graymap[(i+2) * image.cols + (j+2)];
+
+                    qsort(window, 25, sizeof(gray), comparator);
+                    output_image.graymap[i * image.cols + j] = window[12];
+                }
+            }
+            image = output_image;
+        }
+    }
     return output_image;
 }
