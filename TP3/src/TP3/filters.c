@@ -13,7 +13,7 @@ pgm_file binomial_filter(pgm_file image, int filter_size, int iterations) {
     output_image.graymap = (gray *) malloc(image.rows * image.cols * sizeof(gray));
 
     if (filter_size == 3){
-        float binomial_filter[3][3] =  {{1, 2, 1}, {2, 4, 2}, {1, 2, 1}};
+        int binomial_filter[3][3] =  {{1, 2, 1}, {2, 4, 2}, {1, 2, 1}};
         for (int k = 1; k <= iterations; k++){
             for (int i = 1; i < image.rows - 1; i++){
                 for (int j = 1; j < image.cols -1; j++){
