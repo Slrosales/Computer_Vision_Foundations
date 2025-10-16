@@ -1,13 +1,82 @@
 #include "filters.h"
 #include "../Utils/Util.h"
+#include <stdio.h>
+#include <stdlib.h>
 
 
 // apply binomial filter to image
 pgm_file binomial_filter(pgm_file image, int filter_size, int iterations) {
     pgm_file output_image;
-
-    printf("PLEASE IMPLEMENT binomial_filter\n");
     output_image = image;
+    int sum;
+
+    output_image.graymap = (gray *) malloc(image.rows * image.cols * sizeof(gray));
+
+    if (filter_size == 3){
+        float binomial_filter[3][3] =  {{1, 2, 1}, {2, 4, 2}, {1, 2, 1}};
+        for (int k = 1; k <= iterations; k++){
+            for (int i = 1; i < image.rows - 1; i++){
+                for (int j = 1; j < image.cols -1; j++){
+                    sum = 0;
+                    sum = binomial_filter[0][0] * image.graymap[(i-1) * image.cols + (j-1)] +
+                            binomial_filter[0][1] * image.graymap[(i-1)* image.cols + j] +
+                            binomial_filter[0][2] * image.graymap[(i-1) * image.cols + (j+1)] +
+                            binomial_filter[1][0] * image.graymap[i * image.cols + (j-1)] +
+                            binomial_filter[1][1] * image.graymap[i * image.cols + j] +
+                            binomial_filter[1][2] * image.graymap[i * image.cols + (j+1)] +
+                            binomial_filter[2][0] * image.graymap[(i+1) * image.cols + (j-1)] +
+                            binomial_filter[2][1] * image.graymap[(i+1) * image.cols + j] +
+                            binomial_filter[2][2] * image.graymap[(i+1) * image.cols + (j+1)];
+
+                    sum /= 16;
+                    output_image.graymap[i * image.cols + j] = sum;
+                }
+            }
+            image = output_image;
+        }
+    } else if (filter_size == 5){
+        float binomial_filter[5][5] = {{1, 4, 6, 4, 1}, {4, 16, 24, 16, 4}, {6, 24, 36, 24, 6}, {4, 16, 24, 16, 4}, {1, 4, 6, 4, 1}};
+        for (int k = 1; k <= iterations; k++){
+            for (int i = 2; i < image.rows - 2; i++){
+                for (int j = 2; j < image.cols - 2; j++){
+                    sum = 0;
+                    sum = binomial_filter[0][0] * image.graymap[(i-2) * image.cols + (j-2)] +
+                            binomial_filter[0][1] * image.graymap[(i-2)* image.cols + (j-1)] +
+                            binomial_filter[0][2] * image.graymap[(i-2) * image.cols + j] +
+                            binomial_filter[0][3] * image.graymap[(i-2) * image.cols + (j+1)] +
+                            binomial_filter[0][4] * image.graymap[(i-2) * image.cols + (j+2)] +
+
+                            binomial_filter[1][0] * image.graymap[(i-1) * image.cols + (j-2)] +
+                            binomial_filter[1][1] * image.graymap[(i-1)* image.cols + (j-1)] +
+                            binomial_filter[1][2] * image.graymap[(i-1) * image.cols + j] +
+                            binomial_filter[1][3] * image.graymap[(i-1) * image.cols + (j+1)] +
+                            binomial_filter[1][4] * image.graymap[(i-1) * image.cols + (j+2)] +
+
+                            binomial_filter[2][0] * image.graymap[i * image.cols + (j-2)] +
+                            binomial_filter[2][1] * image.graymap[i* image.cols + (j-1)] +
+                            binomial_filter[2][2] * image.graymap[i * image.cols + j] +
+                            binomial_filter[2][3] * image.graymap[i * image.cols + (j+1)] +
+                            binomial_filter[2][4] * image.graymap[i * image.cols + (j+2)] +
+
+                            binomial_filter[3][0] * image.graymap[(i+1) * image.cols + (j-2)] +
+                            binomial_filter[3][1] * image.graymap[(i+1)* image.cols + (j-1)] +
+                            binomial_filter[3][2] * image.graymap[(i+1) * image.cols + j] +
+                            binomial_filter[3][3] * image.graymap[(i+1) * image.cols + (j+1)] +
+                            binomial_filter[3][4] * image.graymap[(i+1) * image.cols + (j+2)] +
+
+                            binomial_filter[4][0] * image.graymap[(i+2) * image.cols + (j-2)] +
+                            binomial_filter[4][1] * image.graymap[(i+2)* image.cols + (j-1)] +
+                            binomial_filter[4][2] * image.graymap[(i+2) * image.cols + j] +
+                            binomial_filter[4][3] * image.graymap[(i+2) * image.cols + (j+1)] +
+                            binomial_filter[4][4] * image.graymap[(i+2) * image.cols + (j+2)];
+
+                    sum /= 256;
+                    output_image.graymap[i * image.cols + j] = sum;
+                }
+            }
+            image = output_image;
+        }
+    }
 
     return output_image;
 }
