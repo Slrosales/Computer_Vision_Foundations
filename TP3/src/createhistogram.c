@@ -19,7 +19,7 @@ int main(int argc, char* argv[]) {
 
     // Computing histogram
     histogram_t histogram = compute_histogram(image);
-
+    
     // Saving histogram
     save_histogram(histogram, argv[2]);
 

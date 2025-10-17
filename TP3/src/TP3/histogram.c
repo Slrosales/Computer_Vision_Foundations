@@ -6,24 +6,65 @@
 
 
 histogram_t compute_histogram(pgm_file image) {
-
-    printf("PLEASE IMPLEMENT compute_histogram\n");
-
     histogram_t histogram;
-    histogram.size = 0;
+    histogram.size = 256;
+
+    histogram.histogram = (int *)calloc(histogram.size, sizeof(int));
+
+    int num_pixels = image.rows * image.cols;
+    for (int i = 0; i < num_pixels; i++){
+      histogram.histogram[image.graymap[i]]++;
+    }
 
     return histogram;
 
 }
 
+int max_value(pgm_file image){
+  int max_value = -1;
+  histogram_t histogram;
+  histogram.size = 256;
+
+    histogram.histogram = (int *)calloc(histogram.size, sizeof(int));
+    int num_pixels = image.rows * image.cols;
+    
+    for (int i = 0; i < num_pixels; i++){
+      histogram.histogram[image.graymap[i]]++;
+      if (histogram.histogram[image.graymap[i]] != 0 && image.graymap[i] > max_value){
+        max_value = image.graymap[i];
+      }
+    }
+
+    return max_value;
+}
+
+int min_value(pgm_file image){
+  int min_value = 257;
+  histogram_t histogram;
+  histogram.size = 256;
+
+    histogram.histogram = (int *)calloc(histogram.size, sizeof(int));
+    int num_pixels = image.rows * image.cols;
+    
+    for (int i = 0; i < num_pixels; i++){
+      histogram.histogram[image.graymap[i]]++;
+      if (histogram.histogram[image.graymap[i]] != 0 && image.graymap[i] < min_value){
+        min_value = image.graymap[i];
+      }
+    }
+
+    return min_value;
+}
+
 
 pgm_file histogram_stretching(pgm_file image) {
-
-    printf("PLEASE IMPLEMENT histogram_stretching\n");
-
     pgm_file output_image;
-
     output_image = image;
+
+    int max = 256;
+
+    int max_value_xd = min_value(image);
+    printf("%d\n", max_value_xd);
 
     return output_image;
 }
