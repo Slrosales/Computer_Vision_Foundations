@@ -30,7 +30,7 @@ int max_value(pgm_file image){
     
     for (int i = 0; i < num_pixels; i++){
       histogram.histogram[image.graymap[i]]++;
-      if (histogram.histogram[image.graymap[i]] != 0 && image.graymap[i] > max_value){
+      if ( image.graymap[i] > max_value){
         max_value = image.graymap[i];
       }
     }
@@ -60,7 +60,18 @@ int min_value(pgm_file image){
 pgm_file histogram_stretching(pgm_file image) {
     pgm_file output_image;
     output_image = image;
+    output_image.graymap = (gray *) malloc(image.rows * image.cols * sizeof(gray));
 
+    float T = 0.0;
+    int min = min_value(image);
+    int max = max_value(image);
+
+    for (int i = 0; i < image.rows; i++){
+      for (int j = 0; j < image.cols; j++){
+        T = ((float)(image.graymap[i * image.cols + j] - min)/(max - min))*255.0;
+        output_image.graymap[i * image.cols + j] = (gray) T;
+      }
+    }
 
     return output_image;
 }
