@@ -1,6 +1,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 
 #include "../Utils/types.h"
 
@@ -77,12 +78,25 @@ pgm_file histogram_stretching(pgm_file image) {
 }
 
 pgm_file histogram_equalization(pgm_file image) {
-
-    printf("PLEASE IMPLEMENT histogram_equalization\n");
-
     pgm_file output_image;
-
     output_image = image;
+
+    output_image.graymap = (gray *) malloc(image.rows * image.cols * sizeof(gray));
+
+    gray T[256];
+    float hist_sum = 0;
+
+    histogram_t histogram = compute_histogram(image);
+    int num_pixels  = image.rows * image.cols;
+
+    for (int i = 0; i <= 255; i++){
+      hist_sum += histogram.histogram[i];
+      T[i] = (gray)roundf( ((float) hist_sum / num_pixels) * 255.0 );
+    }
+
+    for (int i = 0; i < num_pixels; i++){
+      output_image.graymap[i] = T[image.graymap[i]];
+    }
 
     return output_image;
 }

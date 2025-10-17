@@ -12,11 +12,12 @@ CC        =  gcc
 CFLAGS    =  -g -Wall
 CPPFLAGS  =  -DDEBUG
 LDFLAGS   =  -g -lm
+LDLIBS = -lm
 
 smoothimage : smoothimage.o Utils/Util.o TP3/filters.o
 medianfilter : medianfilter.o Utils/Util.o TP3/filters.o
 createhistogram : createhistogram.o Utils/Util.o TP3/histogram.o
-histogramstretching : histogramstretching.o Utils/Util.o TP3/histogram.o
+histogramstretching : histogramstretching.o Utils/Util.o TP3/histogram.o 
 histogramequalization : histogramequalization.o Utils/Util.o TP3/histogram.o
 
 
