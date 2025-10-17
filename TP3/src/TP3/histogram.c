@@ -61,10 +61,6 @@ pgm_file histogram_stretching(pgm_file image) {
     pgm_file output_image;
     output_image = image;
 
-    int max = 256;
-
-    int max_value_xd = min_value(image);
-    printf("%d\n", max_value_xd);
 
     return output_image;
 }
