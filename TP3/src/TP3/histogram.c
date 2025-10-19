@@ -54,6 +54,7 @@ pgm_file histogram_stretching(pgm_file image) {
     float T = 0.0;
     int min = min_value(image);
     int max = max_value(image);
+
     int num_pixels = image.rows * image.cols;
 
     for (int i = 0; i < num_pixels; i++) {
