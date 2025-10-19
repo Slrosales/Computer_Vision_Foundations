@@ -21,40 +21,28 @@ histogram_t compute_histogram(pgm_file image) {
 
 }
 
-int max_value(pgm_file image){
-  int max_value = -1;
-  histogram_t histogram;
-  histogram.size = 256;
-
-    histogram.histogram = (int *)calloc(histogram.size, sizeof(int));
+int max_value(pgm_file image) {
+    int current_max = -1;
     int num_pixels = image.rows * image.cols;
     
-    for (int i = 0; i < num_pixels; i++){
-      histogram.histogram[image.graymap[i]]++;
-      if ( image.graymap[i] > max_value){
-        max_value = image.graymap[i];
-      }
+    for (int i = 0; i < num_pixels; i++) {
+        if (image.graymap[i] > current_max) {
+            current_max = image.graymap[i];
+        }
     }
-
-    return max_value;
+    return current_max;
 }
 
-int min_value(pgm_file image){
-  int min_value = 257;
-  histogram_t histogram;
-  histogram.size = 256;
-
-    histogram.histogram = (int *)calloc(histogram.size, sizeof(int));
+int min_value(pgm_file image) {
+    int current_min = 255; 
     int num_pixels = image.rows * image.cols;
     
-    for (int i = 0; i < num_pixels; i++){
-      histogram.histogram[image.graymap[i]]++;
-      if (histogram.histogram[image.graymap[i]] != 0 && image.graymap[i] < min_value){
-        min_value = image.graymap[i];
-      }
+    for (int i = 0; i < num_pixels; i++) {
+        if (image.graymap[i] < current_min) {
+            current_min = image.graymap[i];
+        }
     }
-
-    return min_value;
+    return current_min;
 }
 
 
@@ -66,12 +54,11 @@ pgm_file histogram_stretching(pgm_file image) {
     float T = 0.0;
     int min = min_value(image);
     int max = max_value(image);
+    int num_pixels = image.rows * image.cols;
 
-    for (int i = 0; i < image.rows; i++){
-      for (int j = 0; j < image.cols; j++){
-        T = ((float)(image.graymap[i * image.cols + j] - min)/(max - min))*255.0;
-        output_image.graymap[i * image.cols + j] = (gray) T;
-      }
+    for (int i = 0; i < num_pixels; i++) {
+        T = ((float)(image.graymap[i] - min) / (max - min)) * 255.0;
+        output_image.graymap[i] = (gray)T;
     }
 
     return output_image;
