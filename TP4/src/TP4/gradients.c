@@ -43,8 +43,8 @@ gradient_image compute_gradients(pgm_file image) {
         for (int j = 1; j < cols - 1; j++) {
             float sum = 0.0f;
 
-            for (int k = i - 1; k <= 1; k++) {
-                for (int l = j - 1; l <= 1; l++) {
+            for (int k = - 1; k <= 1; k++) {
+                for (int l = - 1; l <= 1; l++) {
                     sum += h2[k + 1][l + 1] * image.graymap[(i + k) * cols + (j + l)];
                 }
             }
