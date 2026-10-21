@@ -53,3 +53,36 @@ dkms.conf
 
 # debug information files
 *.dwo
+
+# OS / editor junk
+.DS_Store
+._*
+Thumbs.db
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+
+# Compiled programs (names from the Makefiles)
+TP1/pgmtopgm
+TP1/ppmtopam
+TP1/ppmtopgm
+TP1/ppmtorgb
+TP2/src/project_points
+TP2/src/project_points_bonus
+TP3/src/createhistogram
+TP3/src/histogramequalization
+TP3/src/histogramstretching
+TP3/src/medianfilter
+TP3/src/smoothimage
+TP4/src/cannyEdges
+TP4/src/displayGradientMagnitudes
+TP5/src/kmeans
+
+# Generated output
+TP1/results/
+TP2/src/results/
+TP3/src/results/
+TP4/src/results/
+TP5/results/
